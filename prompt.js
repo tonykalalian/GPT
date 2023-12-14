@@ -1,24 +1,23 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
-const dotenv = require("dotenv");
+const {
+  GoogleGenerativeAI,
+  HarmCategory,
+  HarmBlockThreshold,
+} = require("@google/generative-ai");
 const readline = require("readline");
 const path = require("path");
 
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 const MODEL_NAME = "gemini-pro";
-const API_KEY = process.env.API_KEY;
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-const genAI = new GoogleGenerativeAI(API_KEY);
+const genAI = new GoogleGenerativeAI("AIzaSyBJxBigB97ZkVn5V55OR6w0BU6M6-zjajk");
 const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
 const generationConfig = {
@@ -29,10 +28,22 @@ const generationConfig = {
 };
 
 const safetySettings = [
-  { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
 ];
 
 const chat = model.startChat({
@@ -58,8 +69,8 @@ app.post("/send-message", async (req, res) => {
 
 app.use(express.static(path.join(__dirname, "public")));
 
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+const server = app.listen(3000, () => {
+  console.log(`Server is running on port ${3000}`);
 });
 
 async function askQuestion(question) {
