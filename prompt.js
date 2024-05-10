@@ -7,7 +7,7 @@ const {
 } = require("@google/generative-ai");
 const readline = require("readline");
 const path = require("path");
-
+require('dotenv').config();
 const app = express();
 
 const MODEL_NAME = "gemini-pro";
@@ -17,7 +17,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-const genAI = new GoogleGenerativeAI("AIzaSyBJxBigB97ZkVn5V55OR6w0BU6M6-zjajk");
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
 const generationConfig = {
@@ -70,7 +70,7 @@ app.post("/send-message", async (req, res) => {
 app.use(express.static(path.join(__dirname, "public")));
 
 const server = app.listen(3000, () => {
-  console.log(`Server is running on port ${3000}`);
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
 
 async function askQuestion(question) {
